@@ -1,0 +1,31 @@
+spring:
+  application:
+    # 应用名称
+    name: adaptation
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=47.104.230.230)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=orcl.lan)))
+    username: shyw_soc
+    password: soc
+    dbcp2:
+      default-query-timeout: 5
+      initial-size: 1
+      max-total: 10
+  http:
+    multipart:
+      max-file-size: 2000MB
+      max-request-size: 2000MB
+
+server:
+  # 端口
+  port: 10080
+#  context-path: /adaptation
+
+mybatis:
+  mapper-locations: classpath*:mybatis/*.xml
+  type-aliases-package: com.iwhale.adaptation
+
+logging:
+  level:
+    com:
+      iwhale: DEBUG
