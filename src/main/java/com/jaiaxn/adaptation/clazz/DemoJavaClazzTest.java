@@ -51,8 +51,6 @@ public class DemoJavaClazzTest extends BaseDao implements JavaCustomizeComponent
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-        List<Map<String, Object>> resultList = baseDao.queryForList(execSql, adaptationRequest.getParamMap());
-        resultMap.put("data", resultList);
         return resultMap;
     }
 }

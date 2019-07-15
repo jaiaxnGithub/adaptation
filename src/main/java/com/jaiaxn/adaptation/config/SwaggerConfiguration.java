@@ -28,7 +28,7 @@ public class SwaggerConfiguration {
                 .directModelSubstitute(Byte.class, Integer.class)
                 .select()
                 // 为当前包路径
-                .apis(RequestHandlerSelectors.basePackage("com.iwhale.adaptation"))
+                .apis(RequestHandlerSelectors.basePackage("com.jaiaxn.adaptation"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -40,7 +40,7 @@ public class SwaggerConfiguration {
                 // 描述
                 .description("")
                 // 创建人
-//                .contact(new Contact("iwhale", "", ""))
+//                .contact(new Contact("jaiaxn", "", ""))
                 // 版本号
                 .version("1.0")
                 .build();

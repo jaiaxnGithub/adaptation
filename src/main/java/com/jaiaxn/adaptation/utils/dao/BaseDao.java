@@ -115,7 +115,7 @@ public class BaseDao {
         if (count == 0) {
             return new Page<>();
         }
-        int startNum = offset + 1;
+        int startNum = offset;
         int endNum = offset + limit;
         StringBuffer querySql = new StringBuffer();
         querySql.append("select * from (select rownum as idx,tt.* from ( ").append(sql).append(" ) tt ) ttt where ttt.idx between ")
@@ -137,7 +137,7 @@ public class BaseDao {
      * @throws Exception
      */
     public List<Map<String, Object>> queryListDataByPageForOracle(String sql, int offset, int limit, Map paramMap) throws Exception {
-        int startNum = offset + 1;
+        int startNum = offset;
         int endNum = offset + limit;
         StringBuffer querySql = new StringBuffer();
         querySql.append("select * from (select rownum as idx,tt.* from ( ").append(sql).append(" ) tt ) ttt where ttt.idx between ")

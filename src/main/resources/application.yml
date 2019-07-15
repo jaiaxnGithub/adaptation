@@ -23,9 +23,9 @@ server:
 
 mybatis:
   mapper-locations: classpath*:mybatis/*.xml
-  type-aliases-package: com.iwhale.adaptation
+  type-aliases-package: com.jaiaxn.adaptation
 
 logging:
   level:
     com:
-      iwhale: DEBUG
+      jaiaxn: DEBUG

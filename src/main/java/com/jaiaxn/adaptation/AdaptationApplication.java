@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description:
  **/
 @SpringBootApplication
-@MapperScan("com.iwhale")
+@MapperScan("com.jaiaxn")
 public class AdaptationApplication {
     public static void main(String[] args) {
         SpringApplication.run(AdaptationApplication.class, args);
