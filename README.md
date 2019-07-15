@@ -1,6 +1,8 @@
 # adaptation
 数据库操作统一适配入口
 
+NamedParameterJdbcTemplate项目应用
+
 可执行sql位于sql目录下
 
 swagger页面地址：
