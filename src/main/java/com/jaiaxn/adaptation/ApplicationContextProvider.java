@@ -1,4 +1,4 @@
-package com.iwhale.adaptation;
+package com.jaiaxn.adaptation;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

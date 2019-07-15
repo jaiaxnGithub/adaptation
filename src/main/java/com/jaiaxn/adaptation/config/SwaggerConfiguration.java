@@ -1,4 +1,4 @@
-package com.iwhale.adaptation.config;
+package com.jaiaxn.adaptation.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

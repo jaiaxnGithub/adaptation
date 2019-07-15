@@ -1,8 +1,8 @@
-package com.iwhale.adaptation.controller;
+package com.jaiaxn.adaptation.controller;
 
-import com.iwhale.adaptation.dto.AdaptationRequest;
-import com.iwhale.adaptation.dto.ResultVO;
-import com.iwhale.adaptation.service.AdaptationService;
+import com.jaiaxn.adaptation.dto.AdaptationRequest;
+import com.jaiaxn.adaptation.dto.ResultVO;
+import com.jaiaxn.adaptation.service.AdaptationService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

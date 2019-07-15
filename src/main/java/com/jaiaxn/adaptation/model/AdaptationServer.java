@@ -1,4 +1,4 @@
-package com.iwhale.adaptation.model;
+package com.jaiaxn.adaptation.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

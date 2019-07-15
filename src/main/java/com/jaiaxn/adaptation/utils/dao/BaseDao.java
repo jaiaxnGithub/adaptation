@@ -1,7 +1,7 @@
-package com.iwhale.adaptation.utils.dao;
+package com.jaiaxn.adaptation.utils.dao;
 
-import com.iwhale.adaptation.ApplicationContextProvider;
-import com.iwhale.adaptation.utils.page.Page;
+import com.jaiaxn.adaptation.ApplicationContextProvider;
+import com.jaiaxn.adaptation.utils.page.Page;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.select.PlainSelect;

@@ -1,10 +1,13 @@
-package com.iwhale.adaptation.demo;
+package com.jaiaxn.adaptation.clazz;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
-import com.iwhale.adaptation.config.JavaCustomizeComponent;
-import com.iwhale.adaptation.utils.dao.BaseDao;
-import com.iwhale.adaptation.dto.AdaptationRequest;
+import com.jaiaxn.adaptation.config.JavaCustomizeComponent;
+import com.jaiaxn.adaptation.utils.dao.BaseDao;
+import com.jaiaxn.adaptation.dto.AdaptationRequest;
+import com.jaiaxn.adaptation.utils.page.Page;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +23,11 @@ import java.util.Map;
  * @date: 2019年07月10日
  * @description: 定制化java类demo
  **/
+@Slf4j
 @Service
-public class DemoJavaClazzTest implements JavaCustomizeComponent {
+public class DemoJavaClazzTest extends BaseDao implements JavaCustomizeComponent {
+
+    private static Logger logger = Logger.getLogger(DemoJavaClazzTest.class);
 
     private final BaseDao baseDao;
 
@@ -35,6 +41,16 @@ public class DemoJavaClazzTest implements JavaCustomizeComponent {
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("req", JSON.toJSON(adaptationRequest));
         resultMap.put("execSql", execSql);
+        try {
+            Page page = super.queryPageDataByPageForOracle(execSql, 1, 10, adaptationRequest.getParamMap());
+            resultMap.put("rows", page.getList());
+            resultMap.put("records", page.getTotalNumber());
+            resultMap.put("page", page.getCurrentPage());
+            resultMap.put("pageSize", page.getPageSize());
+            resultMap.put("total", page.getTotalPage());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
         List<Map<String, Object>> resultList = baseDao.queryForList(execSql, adaptationRequest.getParamMap());
         resultMap.put("data", resultList);
         return resultMap;

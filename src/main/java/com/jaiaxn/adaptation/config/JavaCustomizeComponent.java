@@ -1,6 +1,6 @@
-package com.iwhale.adaptation.config;
+package com.jaiaxn.adaptation.config;
 
-import com.iwhale.adaptation.dto.AdaptationRequest;
+import com.jaiaxn.adaptation.dto.AdaptationRequest;
 
 import java.util.Map;
 

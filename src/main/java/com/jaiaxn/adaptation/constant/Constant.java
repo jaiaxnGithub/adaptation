@@ -1,4 +1,4 @@
-package com.iwhale.adaptation.constant;
+package com.jaiaxn.adaptation.constant;
 
 /**
  * @author: wang.jiaxin

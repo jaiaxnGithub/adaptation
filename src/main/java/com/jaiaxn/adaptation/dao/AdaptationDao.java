@@ -1,7 +1,7 @@
-package com.iwhale.adaptation.dao;
+package com.jaiaxn.adaptation.dao;
 
-import com.iwhale.adaptation.model.AdaptationServer;
-import com.iwhale.adaptation.model.AdaptationServerParam;
+import com.jaiaxn.adaptation.model.AdaptationServer;
+import com.jaiaxn.adaptation.model.AdaptationServerParam;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 

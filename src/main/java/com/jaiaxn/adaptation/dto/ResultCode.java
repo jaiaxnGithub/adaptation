@@ -1,4 +1,4 @@
-package com.iwhale.adaptation.dto;
+package com.jaiaxn.adaptation.dto;
 
 /**
  * @author: wang.jiaxin

@@ -1,17 +1,17 @@
-package com.iwhale.adaptation.service;
+package com.jaiaxn.adaptation.service;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.iwhale.adaptation.ApplicationContextProvider;
-import com.iwhale.adaptation.config.JavaCustomizeComponent;
-import com.iwhale.adaptation.constant.Constant;
-import com.iwhale.adaptation.dao.AdaptationDao;
-import com.iwhale.adaptation.utils.dao.BaseDao;
-import com.iwhale.adaptation.dto.AdaptationRequest;
-import com.iwhale.adaptation.dto.ResultVO;
-import com.iwhale.adaptation.model.AdaptationServer;
-import com.iwhale.adaptation.model.AdaptationServerParam;
+import com.jaiaxn.adaptation.ApplicationContextProvider;
+import com.jaiaxn.adaptation.config.JavaCustomizeComponent;
+import com.jaiaxn.adaptation.constant.Constant;
+import com.jaiaxn.adaptation.dao.AdaptationDao;
+import com.jaiaxn.adaptation.utils.dao.BaseDao;
+import com.jaiaxn.adaptation.dto.AdaptationRequest;
+import com.jaiaxn.adaptation.dto.ResultVO;
+import com.jaiaxn.adaptation.model.AdaptationServer;
+import com.jaiaxn.adaptation.model.AdaptationServerParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;

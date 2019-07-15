@@ -1,4 +1,4 @@
-package com.iwhale.adaptation;
+package com.jaiaxn.adaptation;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

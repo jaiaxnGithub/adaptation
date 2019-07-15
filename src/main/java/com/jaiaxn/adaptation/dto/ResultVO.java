@@ -1,7 +1,7 @@
-package com.iwhale.adaptation.dto;
+package com.jaiaxn.adaptation.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.iwhale.adaptation.constant.ResultCodeEnum;
+import com.jaiaxn.adaptation.constant.ResultCodeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

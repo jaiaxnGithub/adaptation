@@ -1,4 +1,4 @@
-package com.iwhale.adaptation.utils.page;
+package com.jaiaxn.adaptation.utils.page;
 
 import java.io.Serializable;
 import java.util.Collections;
