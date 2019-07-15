@@ -4,9 +4,9 @@ spring:
     name: adaptation
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=47.104.230.230)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=orcl.lan)))
-    username: shyw_soc
-    password: soc
+    url: url
+    username: username
+    password: password
     dbcp2:
       default-query-timeout: 5
       initial-size: 1
