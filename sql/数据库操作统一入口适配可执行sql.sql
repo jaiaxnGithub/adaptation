@@ -10,7 +10,7 @@ create table IOM_SERVER_ADAPTATION
   STATE       NUMBER(1) not null,
   CREATE_DATE DATE default SYSDATE,
   STATE_DATE  DATE
-)
+);
 -- Add comments to the table 
 comment on table IOM_SERVER_ADAPTATION
   is '适配服务表';
@@ -53,7 +53,7 @@ create table IOM_SERVER_ADAPTATION_PARAM
   CREATE_DATE DATE default SYSDATE,
   STATE_DATE  DATE,
   PARAM_SIGN  VARCHAR2(32) not null
-)
+);
 -- Add comments to the table 
 comment on table IOM_SERVER_ADAPTATION_PARAM
   is '适配服务参数表';
