@@ -74,7 +74,7 @@ public class DemoJavaClazzTest extends BaseDao implements JavaCustomizeComponent
         // 设置数据源
         super.getDataSourcePool(dataSource);
         // 在特定数据源下执行sql
-        List<Map<String, Object>> list = super.queryForList(execSql, paramMap);
+        List list = super.queryForList(execSql, paramMap);
         resultMap.put("rows", list);
         return resultMap;
     }
