@@ -8,7 +8,6 @@ import com.jaiaxn.adaptation.dto.AdaptationRequest;
 import com.jaiaxn.adaptation.utils.page.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -27,13 +26,6 @@ import java.util.Map;
 public class DemoJavaClazzTest extends BaseDao implements JavaCustomizeComponent {
 
     private static Logger logger = Logger.getLogger(DemoJavaClazzTest.class);
-
-    private final BaseDao baseDao;
-
-    @Autowired
-    public DemoJavaClazzTest(BaseDao baseDao) {
-        this.baseDao = baseDao;
-    }
 
     @Override
     public Map<String, Object> exec(AdaptationRequest adaptationRequest, String execSql) {

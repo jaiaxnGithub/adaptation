@@ -23,6 +23,10 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
+ * NamedParameterJdbcTemplate请求封装类
+ * 使用法法：1、继承，在子类中super.method即可使用
+ * 2、在该类有注解@org.springframework.stereotype.Service的情况下可以使用注解@org.springframework.beans.factory.annotation.Autowired来获取实例
+ *
  * @author: wang.jiaxin
  * @date: 2019年07月09日
  * @description:
@@ -66,14 +70,15 @@ public class BaseDao {
 
     /**
      * update方法
-     * @param sql sql
+     *
+     * @param sql      sql
      * @param paramMap 入参
      * @return
      * @throws DataAccessException
      */
-    public int update(String sql, Map<String, ?> paramMap) throws DataAccessException{
-        logger.info("print sql is ----:"+sql);
-        logger.info("print paramMap is ----:"+paramMap);
+    public int update(String sql, Map<String, ?> paramMap) throws DataAccessException {
+        logger.info("print sql is ----:" + sql);
+        logger.info("print paramMap is ----:" + paramMap);
         return getParameterJdbcTemplate().update(sql, paramMap);
     }
 
@@ -190,8 +195,9 @@ public class BaseDao {
 
     /**
      * 查询制定类型列
-     * @param sql sql
-     * @param paramMap 入参
+     *
+     * @param sql          sql
+     * @param paramMap     入参
      * @param requiredType 返回类型
      * @return
      * @throws DataAccessException
@@ -235,24 +241,25 @@ public class BaseDao {
 
     /**
      * 查询返回List
-     * @param sql sql
+     *
+     * @param sql      sql
      * @param paramMap 入参
      * @return
      * @throws DataAccessException
      */
     public List<Map<String, Object>> queryForList(String sql, Map<String, ?> paramMap)
             throws DataAccessException {
-        logger.info("print sql is ----:"+sql);
-        logger.info("print paramMap is ----:"+paramMap);
+        logger.info("print sql is ----:" + sql);
+        logger.info("print paramMap is ----:" + paramMap);
         String[] propNoAs = propNameForQryColStr(sql);
-        if(propNoAs == null){
+        if (propNoAs == null) {
             return getParameterJdbcTemplate().queryForList(sql, paramMap);
-        }else{
-            return getParameterJdbcTemplate().query(sql, paramMap,new RowMapper() {
+        } else {
+            return getParameterJdbcTemplate().query(sql, paramMap, new RowMapper() {
                 @Override
                 public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
                     // TODO Auto-generated method stub
-                    return saveValue(rs,propNoAs);
+                    return saveValue(rs, propNoAs);
                 }
             });
         }
@@ -260,7 +267,8 @@ public class BaseDao {
 
     /**
      * 查询返回Map
-     * @param sql sql
+     *
+     * @param sql      sql
      * @param paramMap 入参
      * @return
      * @throws DataAccessException
