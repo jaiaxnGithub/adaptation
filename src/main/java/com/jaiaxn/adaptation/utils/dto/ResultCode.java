@@ -1,4 +1,4 @@
-package com.jaiaxn.adaptation.dto;
+package com.jaiaxn.adaptation.utils.dto;
 
 /**
  * @author: wang.jiaxin

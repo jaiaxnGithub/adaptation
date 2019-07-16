@@ -1,7 +1,7 @@
 package com.jaiaxn.adaptation.controller;
 
 import com.jaiaxn.adaptation.dto.AdaptationRequest;
-import com.jaiaxn.adaptation.dto.ResultVO;
+import com.jaiaxn.adaptation.utils.dto.ResultVO;
 import com.jaiaxn.adaptation.service.AdaptationService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;

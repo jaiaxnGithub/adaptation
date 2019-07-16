@@ -1,6 +1,6 @@
-package com.jaiaxn.adaptation.constant;
+package com.jaiaxn.adaptation.utils.constant;
 
-import com.jaiaxn.adaptation.dto.ResultCode;
+import com.jaiaxn.adaptation.utils.dto.ResultCode;
 
 /**
  * @author: wang.jiaxin

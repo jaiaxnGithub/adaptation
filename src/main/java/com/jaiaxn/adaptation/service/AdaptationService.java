@@ -9,7 +9,7 @@ import com.jaiaxn.adaptation.constant.Constant;
 import com.jaiaxn.adaptation.dao.AdaptationDao;
 import com.jaiaxn.adaptation.utils.dao.BaseDao;
 import com.jaiaxn.adaptation.dto.AdaptationRequest;
-import com.jaiaxn.adaptation.dto.ResultVO;
+import com.jaiaxn.adaptation.utils.dto.ResultVO;
 import com.jaiaxn.adaptation.model.AdaptationServer;
 import com.jaiaxn.adaptation.model.AdaptationServerParam;
 import lombok.extern.slf4j.Slf4j;

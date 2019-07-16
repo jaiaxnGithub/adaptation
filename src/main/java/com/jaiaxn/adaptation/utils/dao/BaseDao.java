@@ -1,6 +1,7 @@
 package com.jaiaxn.adaptation.utils.dao;
 
 import com.jaiaxn.adaptation.ApplicationContextProvider;
+import com.jaiaxn.adaptation.utils.dto.CfgDataSource;
 import com.jaiaxn.adaptation.utils.page.Page;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
@@ -8,11 +9,13 @@ import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.SelectItem;
 import net.sf.jsqlparser.statement.select.SetOperationList;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
@@ -66,6 +69,46 @@ public class BaseDao {
             }
         }
         return namedParameterJdbcTemplate;
+    }
+
+    /**
+     * 设置动态数据源，获取连接池
+     *
+     * @param cfgDataSource 数据源实体
+     */
+    public void getDataSourcePool(CfgDataSource cfgDataSource) {
+        BasicDataSource basicDataSource = createDataSourcePool(cfgDataSource);
+        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(basicDataSource);
+    }
+
+    /**
+     * 创建数据源
+     *
+     * @param cfgDataSource 数据源实体
+     * @return BasicDataSource
+     */
+    public static BasicDataSource createDataSourcePool(CfgDataSource cfgDataSource) {
+        SimpleDriverDataSource simpleDriverDataSource = new SimpleDriverDataSource();
+        Properties properties = new Properties();
+        properties.setProperty("", "");
+        simpleDriverDataSource.setConnectionProperties(properties);
+        BasicDataSource basicDataSource = new BasicDataSource();
+        try {
+            basicDataSource.setDriverClassName(cfgDataSource.getDbDriverClassName());
+            basicDataSource.setUrl(cfgDataSource.getDbUrl());
+            basicDataSource.setUsername(cfgDataSource.getDbUserName());
+            basicDataSource.setPassword(cfgDataSource.getDbPassword());
+            //最大空闲连接
+            basicDataSource.setMaxIdle(cfgDataSource.getMaxIdle());
+            //最大连接数
+            basicDataSource.setMaxTotal(cfgDataSource.getMaxActive());
+            basicDataSource.setMaxWaitMillis(cfgDataSource.getConnectionTimeOut());
+            //超时时间
+            basicDataSource.setRemoveAbandonedTimeout(cfgDataSource.getRemoveAbandoneTimeout());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return basicDataSource;
     }
 
     /**
