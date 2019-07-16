@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +55,7 @@ public class DemoJavaClazzTest extends BaseDao implements JavaCustomizeComponent
      * @param execSql  执行sql
      * @return 结果集
      */
-    public Map queryListTest(Map paramMap, String execSql) {
+    public Map queryListTest(Map<String, ?> paramMap, String execSql) {
         Map<String, Object> resultMap = Maps.newHashMap();
         CfgDataSource dataSource = new CfgDataSource();
         dataSource.setDbType("oracle");
