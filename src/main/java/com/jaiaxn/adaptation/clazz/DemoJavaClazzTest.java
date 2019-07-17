@@ -33,30 +33,8 @@ public class DemoJavaClazzTest extends BaseDao implements JavaCustomizeComponent
     @Override
     public Map<String, Object> exec(AdaptationRequest adaptationRequest, String execSql) {
         Map<String, Object> resultMap = Maps.newHashMap();
-        resultMap.put("req", JSON.toJSON(adaptationRequest));
-        resultMap.put("execSql", execSql);
-        try {
-            Page page = super.queryPageDataByPageForOracle(execSql, 1, 10, adaptationRequest.getParamMap());
-            resultMap.put("rows", page.getList());
-            resultMap.put("records", page.getTotalNumber());
-            resultMap.put("page", page.getCurrentPage());
-            resultMap.put("pageSize", page.getPageSize());
-            resultMap.put("total", page.getTotalPage());
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return resultMap;
-    }
 
-    /**
-     * demo-设置动态数据源，执行sql
-     *
-     * @param paramMap 入参
-     * @param execSql  执行sql
-     * @return 结果集
-     */
-    public Map queryListTest(Map<String, ?> paramMap, String execSql) {
-        Map<String, Object> resultMap = Maps.newHashMap();
+        // 设置动态数据源
         CfgDataSource dataSource = new CfgDataSource();
         dataSource.setDbType("oracle");
         dataSource.setDbDriverClassName("oracle.jdbc.driver.OracleDriver");
@@ -70,11 +48,21 @@ public class DemoJavaClazzTest extends BaseDao implements JavaCustomizeComponent
         dataSource.setConnectionTimeOut(100);
         dataSource.setMaxIdle(10);
         dataSource.setRemoveAbandoneTimeout(180);
-        // 设置数据源
+        // 设置数据源，获取连接池
         super.getDataSourcePool(dataSource);
-        // 在特定数据源下执行sql
-        List list = super.queryForList(execSql, paramMap);
-        resultMap.put("rows", list);
+
+        resultMap.put("req", JSON.toJSON(adaptationRequest));
+        resultMap.put("execSql", execSql);
+        try {
+            Page page = super.queryPageDataByPageForOracle("SELECT A.DATASOURCE_ID,A.DB_PASSWORD FROM CFG_DATASOURCE A WHERE 1=1 ", 1, 2, adaptationRequest.getParamMap());
+            resultMap.put("rows", page.getList());
+            resultMap.put("records", page.getTotalNumber());
+            resultMap.put("page", page.getCurrentPage());
+            resultMap.put("pageSize", page.getPageSize());
+            resultMap.put("total", page.getTotalPage());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
         return resultMap;
     }
 }
