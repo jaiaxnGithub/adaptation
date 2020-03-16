@@ -3,6 +3,7 @@ package com.jaiaxn.adaptation.utils.dao;
 import com.jaiaxn.adaptation.ApplicationContextProvider;
 import com.jaiaxn.adaptation.utils.dto.CfgDataSource;
 import com.jaiaxn.adaptation.utils.page.Page;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.select.PlainSelect;
@@ -24,6 +25,7 @@ import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * NamedParameterJdbcTemplate请求封装类
@@ -34,10 +36,11 @@ import java.util.*;
  * @date: 2019年07月09日
  * @description:
  **/
+@Slf4j
 @Service
 public class BaseDao {
 
-    private static Logger logger = Logger.getLogger(BaseDao.class);
+    private static final Map<Integer, BasicDataSource> DATA_SOURCE_POOL = new ConcurrentHashMap<>();
 
     private static final String SQL_DOT_TAG = ".";
     private static final String SQL_SPACE_TAG = " ";
@@ -58,12 +61,12 @@ public class BaseDao {
 
     NamedParameterJdbcTemplate getParameterJdbcTemplate() throws DataAccessException {
         if (namedParameterJdbcTemplate == null) {
-            logger.info("===================初始化namedParameterJdbcTemplate==============");
+            log.info("===================初始化namedParameterJdbcTemplate==============");
             namedParameterJdbcTemplate = (NamedParameterJdbcTemplate) ApplicationContextProvider.getBean("namedParameterJdbcTemplate");
             if (namedParameterJdbcTemplate != null) {
-                logger.info("===================初始化namedParameterJdbcTemplate成功============");
+                log.info("===================初始化namedParameterJdbcTemplate成功============");
             } else {
-                logger.error("===================获取namedParameterJdbcTemplate失败============");
+                log.error("===================获取namedParameterJdbcTemplate失败============");
                 throw new DataAccessException("获取namedParameterJdbcTemplate失败") {
                 };
             }
@@ -88,25 +91,37 @@ public class BaseDao {
      * @return BasicDataSource
      */
     public static BasicDataSource createDataSourcePool(CfgDataSource cfgDataSource) {
-        SimpleDriverDataSource simpleDriverDataSource = new SimpleDriverDataSource();
-        Properties properties = new Properties();
-        properties.setProperty("", "");
-        simpleDriverDataSource.setConnectionProperties(properties);
-        BasicDataSource basicDataSource = new BasicDataSource();
-        try {
-            basicDataSource.setDriverClassName(cfgDataSource.getDbDriverClassName());
-            basicDataSource.setUrl(cfgDataSource.getDbUrl());
-            basicDataSource.setUsername(cfgDataSource.getDbUserName());
-            basicDataSource.setPassword(cfgDataSource.getDbPassword());
-            //最大空闲连接
-            basicDataSource.setMaxIdle(cfgDataSource.getMaxIdle());
-            //最大连接数
-            basicDataSource.setMaxTotal(cfgDataSource.getMaxActive());
-            basicDataSource.setMaxWaitMillis(cfgDataSource.getConnectionTimeOut());
-            //超时时间
-            basicDataSource.setRemoveAbandonedTimeout(cfgDataSource.getRemoveAbandoneTimeout());
-        } catch (Exception e) {
-            e.printStackTrace();
+        int newDatasourceId = cfgDataSource.getDatasourceId();
+        BasicDataSource basicDataSource = DATA_SOURCE_POOL.get(newDatasourceId);
+        if (null != basicDataSource) {
+            return basicDataSource;
+        } else {
+            if (!DATA_SOURCE_POOL.isEmpty()){
+                int oldDatasourceId = new ArrayList<>(DATA_SOURCE_POOL.keySet()).get(0);
+                BasicDataSource oldDruidDataSource = DATA_SOURCE_POOL.get(oldDatasourceId);
+                try {
+                    oldDruidDataSource.close();
+                } catch (SQLException e) {
+                    log.error("oldDruidDataSource close = {}", e.getMessage());
+                }
+                DATA_SOURCE_POOL.clear();
+            }
+            basicDataSource = new BasicDataSource();
+            try {
+                basicDataSource.setDriverClassName(cfgDataSource.getDbDriverClassName());
+                basicDataSource.setUrl(cfgDataSource.getDbUrl());
+                basicDataSource.setUsername(cfgDataSource.getDbUserName());
+                basicDataSource.setPassword(cfgDataSource.getDbPassword());
+                //最大空闲连接
+                basicDataSource.setMaxIdle(cfgDataSource.getMaxIdle());
+                //最大连接数
+                basicDataSource.setMaxTotal(cfgDataSource.getMaxActive());
+                basicDataSource.setMaxWaitMillis(cfgDataSource.getConnectionTimeOut());
+                //超时时间
+                basicDataSource.setRemoveAbandonedTimeout(cfgDataSource.getRemoveAbandoneTimeout());
+            } catch (Exception e) {
+                log.error("createDataSourcePool error = {}", e.getMessage());
+            }
         }
         return basicDataSource;
     }
@@ -120,8 +135,8 @@ public class BaseDao {
      * @throws DataAccessException
      */
     public int update(String sql, Map<String, ?> paramMap) throws DataAccessException {
-        logger.info("print sql is ----:" + sql);
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + sql);
+        log.info("print paramMap is ----:" + paramMap);
         return getParameterJdbcTemplate().update(sql, paramMap);
     }
 
@@ -134,8 +149,8 @@ public class BaseDao {
      * @throws Exception
      */
     public Map executeSqlForRowSet(String sql, Map paramMap) {
-        logger.info("print sql is ----:" + sql);
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + sql);
+        log.info("print paramMap is ----:" + paramMap);
         SqlRowSet rowSet = namedParameterJdbcTemplate.queryForRowSet(sql, paramMap);
         int colCount = rowSet.getMetaData().getColumnCount();
         String[] columns = rowSet.getMetaData().getColumnNames();
@@ -168,8 +183,8 @@ public class BaseDao {
         StringBuffer querySql = new StringBuffer();
         querySql.append("select * from (select rownum as idx,tt.* from ( ").append(sql).append(" ) tt ) ttt where ttt.idx between ")
                 .append(startNum).append(" and ").append(endNum);
-        logger.info("print sql is ----:" + querySql.toString());
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + querySql.toString());
+        log.info("print paramMap is ----:" + paramMap);
         List result = namedParameterJdbcTemplate.queryForList(querySql.toString(), paramMap);
         return new Page<T>(result, limit, count, offset);
     }
@@ -190,8 +205,8 @@ public class BaseDao {
         StringBuffer querySql = new StringBuffer();
         querySql.append("select * from (select rownum as idx,tt.* from ( ").append(sql).append(" ) tt ) ttt where ttt.idx between ")
                 .append(startNum).append(" and ").append(endNum);
-        logger.info("print sql is ----:" + querySql.toString());
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + querySql.toString());
+        log.info("print paramMap is ----:" + paramMap);
         return namedParameterJdbcTemplate.queryForList(querySql.toString(), paramMap);
     }
 
@@ -213,8 +228,8 @@ public class BaseDao {
             return new Page<>();
         }
         StringBuffer querySql = new StringBuffer();
-        logger.info("print sql is ----:" + querySql.toString());
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + querySql.toString());
+        log.info("print paramMap is ----:" + paramMap);
         querySql.append("select * from (").append(sql).append(") t limit ").append(offset).append(",").append(limit);
         List result = namedParameterJdbcTemplate.queryForList(querySql.toString(), paramMap);
         return new Page<T>(result, limit, count, offset);
@@ -247,8 +262,8 @@ public class BaseDao {
      */
     public <T> T queryForObject(String sql, Map<String, ?> paramMap, Class<T> requiredType)
             throws DataAccessException {
-        logger.info("print sql is ----:" + sql);
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + sql);
+        log.info("print paramMap is ----:" + paramMap);
         try {
             return getParameterJdbcTemplate().queryForObject(sql, paramMap, requiredType);
         } catch (EmptyResultDataAccessException e) {
@@ -264,8 +279,8 @@ public class BaseDao {
      * @return
      */
     public Long executeSqlForLong(String sql, Map paramMap) throws Exception {
-        logger.info("print sql is ----:" + sql);
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + sql);
+        log.info("print paramMap is ----:" + paramMap);
         return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Long.class);
     }
 
@@ -277,8 +292,8 @@ public class BaseDao {
      * @return
      */
     public int executeSqlForInt(String sql, Map paramMap) throws Exception {
-        logger.info("print sql is ----:" + sql);
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + sql);
+        log.info("print paramMap is ----:" + paramMap);
         return getParameterJdbcTemplate().queryForObject(sql, paramMap, Integer.class);
     }
 
@@ -292,8 +307,8 @@ public class BaseDao {
      */
     public List<Map<String, Object>> queryForList(String sql, Map<String, ?> paramMap)
             throws DataAccessException {
-        logger.info("print sql is ----:" + sql);
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + sql);
+        log.info("print paramMap is ----:" + paramMap);
         String[] propNoAs = propNameForQryColStr(sql);
         if (propNoAs == null) {
             return getParameterJdbcTemplate().queryForList(sql, paramMap);
@@ -318,8 +333,8 @@ public class BaseDao {
      */
     public Map<String, Object> queryForMap(String sql, Map<String, ?> paramMap) throws DataAccessException {
         String[] propNoAs = propNameForQryColStr(sql);
-        logger.info("print sql is ----:" + sql);
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + sql);
+        log.info("print paramMap is ----:" + paramMap);
         if (propNoAs == null) {
             try {
                 return getParameterJdbcTemplate().queryForMap(sql, paramMap);
@@ -348,8 +363,8 @@ public class BaseDao {
      * @param paramMap 参数
      */
     public List<Map<String, Object>> executeSqlForList(String sql, Map paramMap) {
-        logger.info("print sql is ----:" + sql);
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + sql);
+        log.info("print paramMap is ----:" + paramMap);
         List<Map<String, Object>> resultList = namedParameterJdbcTemplate.queryForList(sql, paramMap);
         return resultList;
     }
@@ -362,8 +377,8 @@ public class BaseDao {
      * @return
      */
     public Map<String, Object> executeSqlForMap(String sql, Map paramMap) {
-        logger.info("print sql is ----:" + sql);
-        logger.info("print paramMap is ----:" + paramMap);
+        log.info("print sql is ----:" + sql);
+        log.info("print paramMap is ----:" + paramMap);
         Map<String, Object> resultMap = namedParameterJdbcTemplate.queryForMap(sql, paramMap);
         return resultMap;
     }
@@ -376,7 +391,7 @@ public class BaseDao {
      */
     public Long getSequence(String sequenceName) {
         String sql = "select " + sequenceName + ".nextval from dual";
-        logger.info("print sql is ----:" + sql);
+        log.info("print sql is ----:" + sql);
         try {
             return getParameterJdbcTemplate().queryForObject(sql, new HashMap(), Long.class);
         } catch (EmptyResultDataAccessException e) {
