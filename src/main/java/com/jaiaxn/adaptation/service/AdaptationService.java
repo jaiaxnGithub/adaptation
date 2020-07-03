@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.jaiaxn.adaptation.ApplicationContextProvider;
 import com.jaiaxn.adaptation.config.JavaCustomizeComponent;
+import com.jaiaxn.adaptation.config.client.DemoClientService;
 import com.jaiaxn.adaptation.constant.Constant;
 import com.jaiaxn.adaptation.dao.AdaptationDao;
 import com.jaiaxn.adaptation.utils.dao.BaseDao;
@@ -38,6 +39,12 @@ public class AdaptationService {
     public AdaptationService(AdaptationDao adaptationDao, BaseDao baseDao) {
         this.adaptationDao = adaptationDao;
         this.baseDao = baseDao;
+    }
+
+    private DemoClientService demoClientService;
+
+    public void initServiceClient(DemoClientService demoClientService) {
+        this.demoClientService = demoClientService;
     }
 
     /**
@@ -179,5 +186,12 @@ public class AdaptationService {
             }
         }
         return resultMap;
+    }
+
+    /**
+     * do something
+     */
+    public String doSomething(String something){
+        return demoClientService.doSomething(something);
     }
 }

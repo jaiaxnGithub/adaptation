@@ -29,3 +29,27 @@ logging:
   level:
     com:
       jaiaxn: DEBUG
+
+demo:
+  client:
+    url: http://127.0.0.1:8080/
+    username: demo
+    password: demo
+    skipVerify: true
+
+xxl:
+  job:
+    enabled: false
+    admin:
+      addresses: http://localhost:9086/xxl-job-admin
+    ### xxl-job, access token ### xxl-job, access token
+    accessToken:
+    executor:
+      #每个执行器集群的唯一标示
+      appname: executor-adaption
+      ### xxl-job executor address
+      ip:
+      port: 8954
+      logpath: ./logs/xxl-job
+      ### xxl-job log retention days
+      logretentiondays: -1

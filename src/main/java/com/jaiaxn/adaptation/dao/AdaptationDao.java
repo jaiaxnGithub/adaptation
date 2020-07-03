@@ -21,15 +21,15 @@ public interface AdaptationDao {
      * @param adaptationServer 服务编码、服务类型
      * @return 适配服务
      */
-    @Select("SELECT A.ID,A.SERVER_SQL,A.CLAZZ_NAME,A.PARAM_CODE " +
-            "FROM IOM_SERVER_ADAPTATION A " +
-            "WHERE A.STATE = 0 AND A.SERVER_CODE = #{adaptation.serverCode} " +
-            "AND A.SERVER_TYPE = #{adaptation.serverType} ")
+    @Select("select a.id,a.server_sql,a.clazz_name,a.param_code " +
+            "from server_adaptation a " +
+            "where a.state = 0 and a.server_code = #{adaptation.serverCode} " +
+            "and a.server_type = #{adaptation.serverType} ")
     @Results({
-            @Result(property = "id", column = "ID"),
-            @Result(property = "serverSql", column = "SERVER_SQL"),
-            @Result(property = "clazzName", column = "CLAZZ_NAME"),
-            @Result(property = "paramCode", column = "PARAM_CODE")
+            @Result(property = "id", column = "id"),
+            @Result(property = "serverSql", column = "server_sql"),
+            @Result(property = "clazzName", column = "clazz_name"),
+            @Result(property = "paramCode", column = "param_code")
     })
     AdaptationServer queryAdaptationServer(@Param("adaptation") AdaptationServer adaptationServer);
 
@@ -40,19 +40,20 @@ public interface AdaptationDao {
      * @return 适配服务参数
      */
     @Select("<script>" +
-            "SELECT A.ID,A.PARAM_CODE,A.PAGE_CODE,A.DB_CODE,A.PARAM_SQL,A.PARAM_SIGN " +
-            "FROM IOM_SERVER_ADAPTATION_PARAM A " +
-            "WHERE A.STATE = 0 AND A.PARAM_CODE = #{adaptationParam.paramCode} AND A.PAGE_CODE IN " +
+            "select a.id,a.param_code,a.page_code,a.db_code,a.param_sql,a.param_sign " +
+            "from param_adaptation a " +
+            "where a.state = 0 and a.param_code = #{adaptationParam.paramCode} " +
+            "and a.page_code in " +
             "<foreach collection=\"pageCodes\" index=\"index\" item=\"pageCode\" open=\"(\" close=\")\" separator=\",\">" +
             "#{pageCode}" +
             "</foreach>" +
             "</script>")
     @Results({
-            @Result(property = "id", column = "ID"),
-            @Result(property = "pageCode", column = "PAGE_CODE"),
-            @Result(property = "dbCode", column = "DB_CODE"),
-            @Result(property = "paramSql", column = "PARAM_SQL"),
-            @Result(property = "paramSign", column = "PARAM_SIGN")
+            @Result(property = "id", column = "id"),
+            @Result(property = "pageCode", column = "page_code"),
+            @Result(property = "dbCode", column = "db_code"),
+            @Result(property = "paramSql", column = "param_sql"),
+            @Result(property = "paramSign", column = "param_sign")
     })
     List<AdaptationServerParam> queryAdaptationServerParam(@Param("adaptationParam") AdaptationServerParam adaptationServerParam, @Param("pageCodes") List<String> pageCodes);
 }
