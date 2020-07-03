@@ -3,10 +3,10 @@ spring:
     # 应用名称
     name: adaptation
   datasource:
-    driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: url
-    username: username
-    password: password
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/adaption?useUnicode=true&amp;characterEncoding=UTF8&serverTimezone=UTC&useSSL=false
+    username: xuantong
+    password: 123456
     dbcp2:
       default-query-timeout: 5
       initial-size: 1
