@@ -35,6 +35,11 @@ public class DemoServiceAutoConfiguration implements InitializingBean {
         this.demoClientProperties = demoClientProperties;
     }
 
+    /**
+     * 创建DemoClient
+     *
+     * @return DemoClient
+     */
     @Bean(name = "demoClient", destroyMethod = "disconnect")
     public DemoClient sealClient() {
         DemoClient client = new DemoClient(demoClientProperties);
@@ -42,9 +47,11 @@ public class DemoServiceAutoConfiguration implements InitializingBean {
         return client;
     }
 
-
+    /**
+     * 初始化并将DemoClient注入要使用的Bean中去
+     */
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         DemoClient demoClient = context.getBean(DemoClient.class);
         DemoClientService demoClientService = (DemoClientService) demoClient.getNativeClient();
         if (null != demoClientService) {

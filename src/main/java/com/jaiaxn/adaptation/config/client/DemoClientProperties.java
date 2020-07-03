@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author: wang.jiaxin
  * @date: 2020年07月03日
- * @description:
+ * @description: DemoClient相关配置
  **/
 @Data
 @Component

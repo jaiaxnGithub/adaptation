@@ -3,7 +3,7 @@ package com.jaiaxn.adaptation.config.client;
 /**
  * @author: wang.jiaxin
  * @date: 2020年07月03日
- * @description:
+ * @description: 操作客户端接口实现类
  **/
 public class DemoClient implements IDemoClient {
 

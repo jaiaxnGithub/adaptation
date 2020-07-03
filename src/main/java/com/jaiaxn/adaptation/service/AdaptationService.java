@@ -13,7 +13,6 @@ import com.jaiaxn.adaptation.dto.AdaptationRequest;
 import com.jaiaxn.adaptation.utils.dto.ResultVO;
 import com.jaiaxn.adaptation.model.AdaptationServer;
 import com.jaiaxn.adaptation.model.AdaptationServerParam;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -29,7 +28,6 @@ import java.util.Map;
  * @description: 数据库操作统一适配处理类
  **/
 @Slf4j
-@Setter
 @Service
 public class AdaptationService {
 
@@ -194,6 +192,7 @@ public class AdaptationService {
      * do something
      */
     public String doSomething(String something){
+        log.info("AdaptationServiceImpl.doSomething req={}", something);
         return demoClientService.doSomething(something);
     }
 }
