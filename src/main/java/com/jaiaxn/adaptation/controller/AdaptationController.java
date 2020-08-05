@@ -35,7 +35,7 @@ public class AdaptationController {
             @ApiResponse(code=404,message="请求路径没有或页面跳转路径不对")
     })
     @RequestMapping(value = "/exec", method = RequestMethod.POST)
-    public ResultVO<Map> adaptationExec(@RequestBody @ApiParam(value = "统一入口", required = true) @Valid AdaptationRequest adaptationRequest) {
+    public ResultVO<Map<String, Object>> adaptationExec(@RequestBody @ApiParam(value = "统一入口", required = true) @Valid AdaptationRequest adaptationRequest) {
         return adaptationService.adaptationExec(adaptationRequest);
     }
 
@@ -45,7 +45,7 @@ public class AdaptationController {
             @ApiResponse(code=404,message="请求路径没有或页面跳转路径不对")
     })
     @RequestMapping(value = "/test/client", method = RequestMethod.GET)
-    public ResultVO<String> adaptationExec(@RequestParam("something") String something) {
+    public ResultVO<String> adaptationExec(@RequestParam("something") @ApiParam(value = "具体操作", required = true) String something) {
         return ResultVO.success(adaptationService.doSomething(something));
     }
 }

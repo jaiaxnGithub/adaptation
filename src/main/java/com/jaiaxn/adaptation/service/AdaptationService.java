@@ -43,6 +43,11 @@ public class AdaptationService {
 
     private DemoClientService demoClientService;
 
+    /**
+     * 初始化DemoClientService
+     *
+     * @param demoClientService DemoClientService
+     */
     public void initServiceClient(DemoClientService demoClientService) {
         this.demoClientService = demoClientService;
     }
@@ -53,7 +58,7 @@ public class AdaptationService {
      * @param adaptationRequest 请求参数
      * @return 结果
      */
-    public ResultVO<Map> adaptationExec(AdaptationRequest adaptationRequest) {
+    public ResultVO<Map<String, Object>> adaptationExec(AdaptationRequest adaptationRequest) {
         log.info("AdaptationServiceImpl.adaptationExec req={}", JSON.toJSON(adaptationRequest));
         String serverType = adaptationRequest.getServerType();
         AdaptationServer adaptationServerReq = new AdaptationServer();
@@ -188,10 +193,14 @@ public class AdaptationService {
         return resultMap;
     }
 
+
     /**
-     * do something
+     * 执行具体操作
+     *
+     * @param something 具体操作
+     * @return 结果
      */
-    public String doSomething(String something){
+    public String doSomething(String something) {
         log.info("AdaptationServiceImpl.doSomething req={}", something);
         return demoClientService.doSomething(something);
     }
