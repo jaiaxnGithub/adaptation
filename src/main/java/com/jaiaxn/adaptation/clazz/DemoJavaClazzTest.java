@@ -9,10 +9,9 @@ import com.jaiaxn.adaptation.utils.dto.CfgDataSource;
 import com.jaiaxn.adaptation.utils.encrypt.EncryptUtil;
 import com.jaiaxn.adaptation.utils.page.Page;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,9 +25,8 @@ import java.util.Map;
  **/
 @Slf4j
 @Service
+@ConditionalOnProperty(prefix = "spring.application", name = "tag", havingValue = "demo")
 public class DemoJavaClazzTest extends BaseDao implements JavaCustomizeComponent {
-
-    private static Logger logger = Logger.getLogger(DemoJavaClazzTest.class);
 
     @Override
     public Map<String, Object> exec(AdaptationRequest adaptationRequest, String execSql) {
@@ -61,7 +59,7 @@ public class DemoJavaClazzTest extends BaseDao implements JavaCustomizeComponent
             resultMap.put("pageSize", page.getPageSize());
             resultMap.put("total", page.getTotalPage());
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
         return resultMap;
     }

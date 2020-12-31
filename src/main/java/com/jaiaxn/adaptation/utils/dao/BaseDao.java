@@ -102,7 +102,7 @@ public class BaseDao {
                 try {
                     oldDruidDataSource.close();
                 } catch (SQLException e) {
-                    log.error("oldDruidDataSource close = {}", e.getMessage());
+                    log.error("oldDruidDataSource close error, error = {}", e.getMessage());
                 }
                 DATA_SOURCE_POOL.clear();
             }
@@ -120,7 +120,7 @@ public class BaseDao {
                 //超时时间
                 basicDataSource.setRemoveAbandonedTimeout(cfgDataSource.getRemoveAbandoneTimeout());
             } catch (Exception e) {
-                log.error("createDataSourcePool error = {}", e.getMessage());
+                log.error("createDataSourcePool error, error = {}", e.getMessage());
             }
         }
         return basicDataSource;
@@ -313,13 +313,7 @@ public class BaseDao {
         if (propNoAs == null) {
             return getParameterJdbcTemplate().queryForList(sql, paramMap);
         } else {
-            return getParameterJdbcTemplate().query(sql, paramMap, new RowMapper() {
-                @Override
-                public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    // TODO Auto-generated method stub
-                    return saveValue(rs, propNoAs);
-                }
-            });
+            return getParameterJdbcTemplate().query(sql, paramMap, (RowMapper) (rs, rowNum) -> saveValue(rs, propNoAs));
         }
     }
 
@@ -343,14 +337,9 @@ public class BaseDao {
             }
         } else {
             try {
-                return (Map<String, Object>) getParameterJdbcTemplate().queryForObject(sql, paramMap, new RowMapper() {
-                    @Override
-                    public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        // TODO Auto-generated method stub
-                        return saveValue(rs, propNoAs);
-                    }
-                });
+                return (Map<String, Object>) getParameterJdbcTemplate().queryForObject(sql, paramMap, (RowMapper) (rs, rowNum) -> saveValue(rs, propNoAs));
             } catch (EmptyResultDataAccessException e) {
+                log.error(e.getMessage(), e);
                 return null;
             }
         }
@@ -395,6 +384,7 @@ public class BaseDao {
         try {
             return getParameterJdbcTemplate().queryForObject(sql, new HashMap(), Long.class);
         } catch (EmptyResultDataAccessException e) {
+            log.error(e.getMessage(), e);
             return null;
         }
     }
@@ -407,8 +397,7 @@ public class BaseDao {
      * @throws JSQLParserException
      */
     private String[] propNameForQryColStr(String fromStr) {
-        //原有的处理方式对于字段中包含FROM内容（如：HIRE_FROM）的解析会出异常
-        //改用JSqlParser解析 - qi.qingli@2016-06-22 15:40
+        //JSqlParser解析
         CCJSqlParserManager parserManager = new CCJSqlParserManager();
         List<String> colList = new ArrayList<String>();
         try {
@@ -438,7 +427,7 @@ public class BaseDao {
                 }
             }
         } catch (JSQLParserException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         }
         return colList.toArray(new String[0]);

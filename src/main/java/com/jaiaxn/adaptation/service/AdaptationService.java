@@ -35,10 +35,13 @@ public class AdaptationService {
 
     private final BaseDao baseDao;
 
+    private final JavaCustomizeComponent customizeComponent;
+
     @Autowired
-    public AdaptationService(AdaptationDao adaptationDao, BaseDao baseDao) {
+    public AdaptationService(AdaptationDao adaptationDao, BaseDao baseDao, JavaCustomizeComponent customizeComponent) {
         this.adaptationDao = adaptationDao;
         this.baseDao = baseDao;
+        this.customizeComponent = customizeComponent;
     }
 
     private DemoClientService demoClientService;
@@ -179,8 +182,11 @@ public class AdaptationService {
         String clazzName = adaptationServerResp.getClazzName();
         if (StringUtils.isNotBlank(clazzName)) {
             // 加载处理类
-            JavaCustomizeComponent clazz = ApplicationContextProvider.getApplicationContext().getBean(clazzName, JavaCustomizeComponent.class);
-            resultMap = clazz.exec(adaptationRequest, execSql.toString());
+//            JavaCustomizeComponent clazz = ApplicationContextProvider.getApplicationContext().getBean(clazzName, JavaCustomizeComponent.class);
+//            resultMap = clazz.exec(adaptationRequest, execSql.toString());
+
+            // 舍弃反射的方法，使用 ConditionalOnProperty 进行service自定注入
+            customizeComponent.exec(adaptationRequest, execSql.toString());
         } else {
             if (Constant.SERVER_TYPE_SELECT.equals(adaptationRequest.getServerType())) {
                 List<Map<String, Object>> resultList = baseDao.queryForList(execSql.toString(), adaptationRequest.getParamMap());

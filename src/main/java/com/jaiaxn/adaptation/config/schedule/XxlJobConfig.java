@@ -17,10 +17,10 @@ import javax.annotation.Resource;
 @Slf4j
 @Configuration
 @EnableConfigurationProperties(XxlJobProperties.class)
-@ConditionalOnProperty(name="xxl.job.enabled",havingValue="true",matchIfMissing=false)
+@ConditionalOnProperty(name = "xxl.job.enabled", havingValue = "true")
 public class XxlJobConfig {
 
-	@Resource
+    @Resource
     private XxlJobProperties xxlJobProperties;
 
     @Bean(initMethod = "start", destroyMethod = "destroy")
@@ -30,12 +30,12 @@ public class XxlJobConfig {
         xxlJobSpringExecutor.setAdminAddresses(xxlJobProperties.getAdmin().getAddresses());
         xxlJobSpringExecutor.setAppName(xxlJobProperties.getExecutor().getAppName());
         xxlJobSpringExecutor.setIp(xxlJobProperties.getExecutor().getIp());
-        if(xxlJobProperties.getExecutor().getPort() != null){
+        if (xxlJobProperties.getExecutor().getPort() != null) {
             xxlJobSpringExecutor.setPort(xxlJobProperties.getExecutor().getPort());
         }
         xxlJobSpringExecutor.setAccessToken(xxlJobProperties.getAccessToken());
         xxlJobSpringExecutor.setLogPath(xxlJobProperties.getExecutor().getLogPath());
-        if(xxlJobProperties.getExecutor().getLogRetentionDays() != null){
+        if (xxlJobProperties.getExecutor().getLogRetentionDays() != null) {
             xxlJobSpringExecutor.setLogRetentionDays(xxlJobProperties.getExecutor().getLogRetentionDays());
         }
         return xxlJobSpringExecutor;

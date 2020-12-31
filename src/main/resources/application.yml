@@ -2,6 +2,7 @@ spring:
   application:
     # 应用名称
     name: adaptation
+    tag: demo
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/adaption?useUnicode=true&amp;characterEncoding=UTF8&serverTimezone=UTC&useSSL=false
